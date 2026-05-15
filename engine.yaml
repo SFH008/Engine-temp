@@ -28,29 +28,27 @@ one_wire:
 
 sensor:
   - platform: dallas_temp
-    address: 0x0000000000000001
-    name: "Coolant Temperature"
-    id: coolant_temp
+    address: 0x2e03219779899128
+    name: "Alternator Temperature"
     unit_of_measurement: "°C"
     device_class: temperature
     accuracy_decimals: 1
     update_interval: 10s
+    on_value:
+      then:
+        - mqtt.publish:
+            topic: signalk/propulsion/mainEngine/alternatorTemperature
+            payload: !lambda 'return to_string(x);'
 
   - platform: dallas_temp
-    address: 0x0000000000000002
-    name: "Exhaust Temperature"
-    id: exhaust_temp
+    address: 0xda0416a4bcd0ff28
+    name: "Engine Room Temperature"
     unit_of_measurement: "°C"
     device_class: temperature
     accuracy_decimals: 1
     update_interval: 10s
-
-  - platform: dallas_temp
-    address: 0x0000000000000003
-    name: "Gearbox Temperature"
-    id: gearbox_temp
-    unit_of_measurement: "°C"
-    device_class: temperature
-    accuracy_decimals: 1
-    update_interval: 10s
-EOF
+    on_value:
+      then:
+        - mqtt.publish:
+            topic: signalk/propulsion/mainEngine/engineRoomTemperature
+            payload: !lambda 'return to_string(x);'
